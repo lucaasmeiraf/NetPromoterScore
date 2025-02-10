@@ -1,0 +1,89 @@
+{
+  "users": [
+    {
+      "id": "1",
+      "email": "admin@nps.com",
+      "password": "admin123"
+    }
+  ],
+  "surveys": [
+    {
+      "id": "081e",
+      "title": "aaaaa",
+      "questions": [
+        {
+          "text": "bbbb",
+          "type": "range",
+          "options": []
+        },
+        {
+          "text": "aaa",
+          "type": "checkbox",
+          "options": [
+            {
+              "text": "b"
+            },
+            {
+              "text": "w"
+            }
+          ]
+        }
+      ],
+      "createdBy": "admin@nps.com",
+      "updatedBy": "admin@nps.com"
+    },
+    {
+      "id": "d1a7",
+      "title": "teste",
+      "questions": [
+        {
+          "text": "seria?",
+          "type": "range",
+          "options": []
+        },
+        {
+          "text": "E ai?",
+          "type": "radio",
+          "options": [
+            {
+              "text": "1"
+            },
+            {
+              "text": "2"
+            }
+          ]
+        },
+        {
+          "text": "aaadwa",
+          "type": "range",
+          "options": []
+        }
+      ],
+      "createdBy": "admin@nps.com",
+      "updatedBy": "admin@nps.com"
+    }
+  ],
+  "responses": [
+    {
+      "id": "233c",
+      "surveyId": "081e",
+      "answers": [
+        "2",
+        true
+      ],
+      "respondedAt": "2025-02-07T18:31:08.738Z"
+    }
+  ],
+  "emails": [
+    {
+      "id": "8921",
+      "surveyId": "081e",
+      "recipients": [
+        "lucas@medware.com.br",
+        "lucaas.meiraf@gmail.com"
+      ],
+      "sentAt": "2025-02-10T20:43:30.699Z",
+      "status": "enviado"
+    }
+  ]
+}

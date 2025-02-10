@@ -1,0 +1,129 @@
+<template>
+    <div class="modal-overlay" @click.self="close">
+      <div class="modal-content">
+        <h3>Enviar Pesquisa</h3>
+        <form @submit.prevent="handleSubmit">
+          <div class="form-group">
+            <label>E-mails dos Destinatários (separados por vírgula)</label>
+            <textarea v-model="emails" required rows="4"></textarea>
+          </div>
+          
+          <div class="modal-actions">
+            <button type="button" @click="close" class="cancel-button">Cancelar</button>
+            <button type="submit" class="confirm-button">Enviar Pesquisa</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </template>
+  
+  <script setup>
+  import { ref } from 'vue'
+  import axios from 'axios'
+  import { useAlert } from '@/composables/useAlert';
+  
+  const { showAlert } = useAlert();
+  
+  const emit = defineEmits(['close'])
+  const props = defineProps(['surveyId'])
+  
+  const emails = ref('') 
+  
+  const handleSubmit = async () => {
+  try {
+    const recipients = emails.value.split(',').map(e => e.trim());
+    
+    const response = await axios.post('http://localhost:5013/send-email', {
+      to: recipients.join(','),  // Envia todos os e-mails de uma vez
+      surveyId: props.surveyId
+    });
+
+    if (response.data.success) {
+      // Registro no JSON Server
+      await axios.post('http://localhost:5012/emails', {
+        surveyId: props.surveyId,
+        recipients,
+        sentAt: new Date().toISOString(),
+        status: 'enviado'
+      });
+      
+      showAlert({
+      type: 'success',
+      title: 'Envio realizado!',
+      text: `${recipients.length} e-mail(s) enviado(s) com sucesso`,
+      duration: 5000
+    });
+
+      emit('close');
+    } else {
+      alert('Erro parcial: ' + JSON.stringify(response.data.details));
+    }
+
+  } catch (error) {
+    const errorDetails = error.response?.data || error.message;
+    console.error('Erro completo:', errorDetails);
+    
+    showAlert({
+      type: 'error',
+      title: 'Erro no envio',
+      text: error.response?.data?.error || error.message,
+      duration: 8000
+    });
+  }
+};
+  
+  const close = () => emit('close')
+  </script>
+  
+<style scoped>
+  .modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0,0,0,0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  
+  .modal-content {
+    background: white;
+    padding: 2rem;
+    border-radius: 8px;
+    width: 500px;
+  }
+  
+  textarea {
+    width: 100%;
+    padding: 8px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+  }
+  
+  .modal-actions {
+    margin-top: 1rem;
+    display: flex;
+    gap: 1rem;
+    justify-content: flex-end;
+  }
+  
+  .cancel-button {
+    background: #dc3545;
+    color: white;
+    padding: 8px 16px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+  }
+  
+  .confirm-button {
+    background: #34a853;
+    color: white;
+    padding: 8px 16px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+  }
+  </style>

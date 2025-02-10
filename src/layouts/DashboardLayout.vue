@@ -1,0 +1,128 @@
+<template>
+  <div class="dashboard-layout">
+    <aside class="sidebar">
+      <nav>
+        <!-- Adicione este novo link -->
+        <router-link to="/dashboard/create-survey">Criar Nova Pesquisa</router-link>
+        <router-link to="/dashboard/surveys">Pesquisas</router-link>
+        <router-link to="/dashboard/responses">Respostas</router-link>
+      </nav>
+    </aside>
+    
+    <main class="content">
+      <header class="header">
+        <div class="header-left">
+          <button @click="goBack" class="back-button" v-if="showBackButton">Voltar</button>
+          <h1>{{ currentRouteName }}</h1>
+        </div>
+        <button @click="handleLogout">Sair</button>
+      </header>
+      <router-view />
+    </main>
+  </div>
+</template>
+  
+<script setup>
+  import { computed } from 'vue'
+  import { useRouter, useRoute  } from 'vue-router'
+  
+  const router = useRouter()
+  const route = useRoute()
+
+  const currentRouteName = computed(() => {
+    return router.currentRoute.value.name
+  })
+
+  const showBackButton = computed(() => {
+    return !route.path.includes('/dashboard/surveys')
+  })
+
+  const goBack = () => {
+    router.go(-1)
+  }
+  
+  const handleLogout = () => {
+    localStorage.removeItem('isAuthenticated')
+    router.push('/')
+  }
+</script>
+  
+<style scoped lang="scss">
+  .dashboard-layout {
+    display: flex;
+    min-height: 100vh;
+  
+    .sidebar {
+      width: 250px;
+      background: #fff;
+      border-right: 1px solid #dadce0;
+      padding: 1rem;
+  
+      nav {
+        display: flex;
+        flex-direction: column;
+        gap: 0.5rem;
+  
+        a {
+          padding: 10px;
+          border-radius: 4px;
+          color: #202124;
+          text-decoration: none;
+          transition: background 0.3s;
+  
+          &:hover {
+            background: #f1f3f4;
+          }
+  
+          &.router-link-exact-active {
+            background: #e8f0fe;
+            color: #1967d2;
+          }
+        }
+      }
+    }
+
+    .header-left {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+    }
+
+    .back-button {
+      background: #f1f3f4;
+      color: #202124;
+      border: 1px solid #dadce0;
+      padding: 8px 16px;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+  
+    .content {
+      flex: 1;
+      background: #f8f9fa;
+  
+      .header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 1rem;
+        background: white;
+        border-bottom: 1px solid #dadce0;
+  
+        h1 {
+          font-size: 1.5rem;
+          color: #202124;
+        }
+  
+        button {
+          padding: 8px 16px;
+          background: #dc3545;
+          color: white;
+          border: none;
+          border-radius: 4px;
+          cursor: pointer;
+        }
+      }
+    }
+  }
+</style>
