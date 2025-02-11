@@ -146,7 +146,7 @@
   }
 
   .new-survey-button {
-    background: #1a73e8;
+    background: #2791d8;
     color: white;
     padding: 10px 20px;
     border-radius: 4px;
@@ -155,16 +155,20 @@
   }
 
   .new-survey-button:hover {
-    background: #1557b0;
+    background: #257fbb;
   }
 
   .send-button {
-    background: #1a73e8;
+    background: #2791d8;
     color: white;
     padding: 8px 16px;
     border: none;
     border-radius: 4px;
     cursor: pointer;
+  }
+
+  .send-button:hover {
+    background: #257fbb;
   }
 
   .survey-list {
@@ -206,6 +210,10 @@
     text-decoration: none;
   }
 
+  .edit-button:hover{
+    background: #2b8844;
+  }
+
   .delete-button {
     background: #dc3545;
     color: white;
@@ -213,6 +221,10 @@
     border: none;
     border-radius: 4px;
     cursor: pointer;
+  }
+
+  .delete-button:hover{
+    background: #b12f3c;
   }
 
   .empty-state {

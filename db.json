@@ -6,17 +6,39 @@
       "password": "admin123"
     }
   ],
-  "surveys": [],
-  "responses": [
+  "surveys": [
     {
-      "id": "233c",
-      "surveyId": null,
-      "answers": [
-        "2",
-        true
+      "id": "198f",
+      "title": "teste",
+      "questions": [
+        {
+          "text": "ajnfwanfwa??",
+          "type": "text",
+          "options": []
+        },
+        {
+          "text": "afwafawfwa",
+          "type": "range",
+          "options": []
+        },
+        {
+          "text": "tetet",
+          "type": "radio",
+          "options": [
+            {
+              "text": "123121"
+            },
+            {
+              "text": "313131"
+            }
+          ]
+        }
       ],
-      "respondedAt": "2025-02-07T18:31:08.738Z"
+      "createdBy": "admin@nps.com",
+      "updatedBy": "admin@nps.com"
     }
+  ],
+  "responses": [
   ],
   "emails": [
     {

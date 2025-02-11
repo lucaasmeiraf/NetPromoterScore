@@ -35,7 +35,7 @@
 
     // Envio para cada destinatário
     for (const email of recipients) {
-      await axios.post('http://localhost:3002/send-email', {
+      await axios.post('http://localhost:5013/send-email', {
         to: email,
         surveyId: props.surveyId
       });
@@ -57,6 +57,7 @@
         text: 'Alguns e-mails não puderam ser enviados.',
         duration: 8000
       });
+      console.log(error)
     }
 };
 

@@ -24,6 +24,7 @@
                 <option value="range">Escala (0-10)</option>
                 <option value="radio">Múltipla Escolha (Radio)</option>
                 <option value="checkbox">Múltipla Escolha (Checkbox)</option>
+                <option value="text">Texto Livre</option>
               </select>
             </div>
 
@@ -66,6 +67,9 @@
                 <input type="checkbox" :name="'question-' + index" :value="option.text" />
                 {{ option.text || "Opção" }}
               </label>
+            </div>
+            <div v-if="question.type === 'text'" class="text-question">
+              <textarea placeholder="Digite sua resposta aqui..."></textarea>
             </div>
           </div>
         </div>
@@ -236,6 +240,19 @@
   background: #1557b0;
 }
 
+.submit-button{
+  position: sticky;
+  bottom: 20px;
+  background: #28c45c;
+  color: white;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+  transition: background 0.3s;
+}
+
   .remove-button {
     background: #ff4444;
     color: white;
@@ -288,6 +305,15 @@
     display: flex;
     flex-direction: column;
     gap: 0.5rem;
+  }
+
+  .text-question textarea {
+    width: 100%;
+    padding: 12px;
+    border: 1px solid #e2e8f0;
+    border-radius: 8px;
+    min-height: 100px;
+    resize: vertical;
   }
 
   @media (max-width: 768px) {
