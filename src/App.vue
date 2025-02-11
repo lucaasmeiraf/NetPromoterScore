@@ -14,7 +14,7 @@
 </template>
 
 <script setup>
-import { useAlert } from '@/composables/useAlert';
+import useAlert from '@/composables/useAlert';
 import Alert from '@/components/Alert.vue';
 
 const { alerts, closeAlert } = useAlert();

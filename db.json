@@ -8,30 +8,57 @@
   ],
   "surveys": [
     {
-      "id": "198f",
-      "title": "teste",
+      "id": "2eb6",
+      "title": "Setor de Demandas",
       "questions": [
         {
-          "text": "ajnfwanfwa??",
-          "type": "text",
-          "options": []
-        },
-        {
-          "text": "afwafawfwa",
+          "text": "Qual o nível de satisfação do atendimento?",
           "type": "range",
           "options": []
         },
         {
-          "text": "tetet",
+          "text": "O problema foi solucionado?",
           "type": "radio",
           "options": [
             {
-              "text": "123121"
+              "text": "Sim, por completo"
             },
             {
-              "text": "313131"
+              "text": "Parcialmente resolvido"
+            },
+            {
+              "text": "Não foi resolvido"
             }
           ]
+        },
+        {
+          "text": "Qual Técnico realizou o seu atendimento?",
+          "type": "checkbox",
+          "options": [
+            {
+              "text": "Lucas"
+            },
+            {
+              "text": "Nayhan"
+            },
+            {
+              "text": "Rendrix"
+            },
+            {
+              "text": "Adriano"
+            },
+            {
+              "text": "Arão"
+            },
+            {
+              "text": "Douglas"
+            }
+          ]
+        },
+        {
+          "text": "Fale mais um pouco sobre o seu atendimento:",
+          "type": "text",
+          "options": []
         }
       ],
       "createdBy": "admin@nps.com",
@@ -39,6 +66,16 @@
     }
   ],
   "responses": [
+    {
+      "id": "f268",
+      "surveyId": null,
+      "answers": [
+        "",
+        "7",
+        "123121"
+      ],
+      "respondedAt": "2025-02-11T11:51:22.458Z"
+    }
   ],
   "emails": [
     {

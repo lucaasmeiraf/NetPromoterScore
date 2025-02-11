@@ -21,12 +21,15 @@
   import { ref } from 'vue'
   import { useRouter } from 'vue-router'
   import axios from 'axios'
+  import useAlert from '@/composables/useAlert';
 
   const router = useRouter()
   const credentials = ref({
     email: '',
     password: ''
   })
+
+  const { showAlert } = useAlert();
 
   const handleLogin = async () => {
   try {
@@ -36,10 +39,25 @@
     if(user) {
       localStorage.setItem('isAuthenticated', 'true')
       localStorage.setItem('user', JSON.stringify(user))
+
+      showAlert({
+        type: 'success',
+        title: 'Login Realizado',
+        text: `Login realizado com sucesso!`,
+        duration: 5000
+      });
+
       router.push('/dashboard')
+    }else{
+      showAlert({
+          type: 'error',
+          title: 'Credenciais inválidas',
+          text: 'Verifique seu e-mail e senha',
+          duration: 4000
+        });
     }
   } catch (error) {
-    console.error('Login error:', error)
+      console.error('Login error:', error)
   }
 }
   </script>

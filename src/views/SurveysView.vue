@@ -59,7 +59,7 @@
   import { ref, onMounted } from 'vue'
   import axios from 'axios'
   import SendSurveyModal from '@/components/SendSurveyModal.vue'
-  import { useAlert } from '@/composables/useAlert'
+  import useAlert from '@/composables/useAlert'
 
   const surveys = ref([])
   const loading = ref(true)
@@ -67,7 +67,7 @@
   const showSendModal = ref(false)
   const selectedSurvey = ref(null)
 
-  const showAlert = useAlert
+  const { showAlert } = useAlert()
 
   const openSendModal = (survey) => {
     selectedSurvey.value = survey.id

@@ -82,13 +82,13 @@ import { ref, onMounted } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import axios from 'axios'
 import { formatDate } from '@/utils/dateFormatter'
-import { useAlert } from '@/composables/useAlert';
+import useAlert from '@/composables/useAlert';
 
 const route = useRoute()
 const router = useRouter()
 const surveyId = route.params.id
 
-const showAlert = useAlert()
+const { showAlert } = useAlert()
 const MAX_QUESTIONS = 20;
 
 // Estado idêntico ao CreateSurveyView
@@ -177,7 +177,14 @@ const handleSubmit = async () => {
     }
 
     await axios.put(`http://localhost:5012/surveys/${surveyId}`, updatedData)
-    alert('Pesquisa atualizada com sucesso!')
+
+    showAlert({
+      type: 'success',
+      title: 'Pesquisa salva',
+      text: `Pesquisa salva com sucesso!`,
+      duration: 5000
+    });
+
     router.push('/dashboard/surveys')
 
   } catch (error) {
@@ -292,6 +299,11 @@ const handleSubmit = async () => {
     transition: background 0.3s;
   }
 
+  .submit-button:hover{
+    bottom: 20px;
+    background: #28a752;
+  }
+
   .actions {
     margin-top: 1rem;
     display: flex;
@@ -325,5 +337,14 @@ const handleSubmit = async () => {
     display: flex;
     flex-direction: column;
     gap: 0.5rem;
+  }
+
+  .text-question textarea {
+    width: 100%;
+    padding: 12px;
+    border: 1px solid #e2e8f0;
+    border-radius: 8px;
+    min-height: 100px;
+    resize: vertical;
   }
 </style>

@@ -2,7 +2,7 @@ import { ref } from 'vue';
 
 const alerts = ref([]);
 
-export function useAlert() {
+export default function useAlert() {
   const showAlert = (options) => {
     const alert = {
       id: Date.now(),

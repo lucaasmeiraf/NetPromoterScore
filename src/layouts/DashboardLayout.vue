@@ -10,7 +10,7 @@
     </aside>
     
     <main class="content">
-      <header class="header">
+      <header v-if="!$route.meta.publicPage" class="header">
         <div class="header-left">
           <button @click="goBack" class="back-button" v-if="showBackButton">Voltar</button>
           <h1>{{ currentRouteName }}</h1>

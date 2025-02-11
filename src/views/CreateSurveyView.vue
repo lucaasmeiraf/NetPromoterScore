@@ -81,7 +81,7 @@
   import { ref } from "vue";
   import axios from "axios";
   import { formatDate } from '@/utils/dateFormatter';
-  import { useAlert } from '@/composables/useAlert';
+  import useAlert from '@/composables/useAlert';
 
   // Estado da pesquisa
   const survey = ref({
@@ -89,7 +89,7 @@
     questions: [],
   });
 
-  const showAlert = useAlert()
+  const { showAlert } = useAlert();
   const MAX_QUESTIONS = 20;
 
   // Adicionar nova pergunta
@@ -154,7 +154,12 @@
     }
 
     await axios.post('http://localhost:5012/surveys', surveyWithDate)
-    alert("Pesquisa salva com sucesso!")
+    showAlert({
+      type: 'success',
+      title: 'Pesquisa salva',
+      text: `Pesquisa salva com sucesso!`,
+      duration: 5000
+    });
     survey.value = { title: "", questions: [] }
   } catch (error) {
     console.error("Erro ao salvar pesquisa:", error)
@@ -253,6 +258,11 @@
   transition: background 0.3s;
 }
 
+.submit-button:hover{
+    bottom: 20px;
+    background: #28a752;
+  }
+
   .remove-button {
     background: #ff4444;
     color: white;
@@ -314,6 +324,11 @@
     border-radius: 8px;
     min-height: 100px;
     resize: vertical;
+  }
+
+  textarea::placeholder {
+    color: #999;
+    font-style: italic;
   }
 
   @media (max-width: 768px) {

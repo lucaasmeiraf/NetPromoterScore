@@ -28,7 +28,10 @@ const router = createRouter({
         {
           path: '/survey/:id',
           name: 'Pesquisa Pública',
-          component: () => import('../views/SurveyPublicView.vue')
+          component: () => import('../views/SurveyPublicView.vue'),
+          meta: {
+            publicPage: true
+          }
         },
         {
           path: 'responses',
