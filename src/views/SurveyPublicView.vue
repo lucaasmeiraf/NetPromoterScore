@@ -2,17 +2,17 @@
   <div class="public-container">
     <div v-if="!submitted" class="survey-card">
       <h1>{{ survey.title }}</h1>
-      
+
       <form @submit.prevent="handleSubmit">
-        <div 
-          v-for="(question, index) in survey.questions" 
+        <div
+          v-for="(question, index) in survey.questions"
           :key="index"
           class="question"
         >
           <label>{{ question.text }}</label>
-          
+
           <!-- Renderização dinâmica das questões -->
-          <component 
+          <component
             :is="getQuestionComponent(question.type)"
             :question="question"
             v-model="answers[index]"
@@ -29,7 +29,7 @@
     </div>
   </div>
 </template>
-  
+
 <script setup>
 import { ref, onMounted } from 'vue'
 import { useRoute } from 'vue-router'
@@ -52,7 +52,7 @@ const getQuestionComponent = (type) => {
     checkbox: CheckboxQuestion
   }[type]
 }
-  
+
   onMounted(async () => {
     try {
       const { data } = await axios.get(`http://localhost:5012/surveys/${route.params.id}`)
@@ -62,7 +62,7 @@ const getQuestionComponent = (type) => {
       console.error('Erro ao carregar pesquisa:', error)
     }
   })
-  
+
   const handleSubmit = async () => {
     try {
       await axios.post('http://localhost:5012/responses', {
@@ -70,14 +70,14 @@ const getQuestionComponent = (type) => {
         answers: answers.value,
         respondedAt: new Date().toISOString()
       })
-      
+
       alert('Obrigado por responder a pesquisa!')
     } catch (error) {
       console.error('Erro ao enviar respostas:', error)
     }
   }
   </script>
-  
+
   <style scoped>
   .public-survey-container {
     max-width: 800px;
@@ -90,7 +90,7 @@ const getQuestionComponent = (type) => {
     margin: 2rem auto;
     padding: 1rem;
   }
-  
+
   .survey-card {
     background: white;
     padding: 2rem;
@@ -109,17 +109,17 @@ const getQuestionComponent = (type) => {
     text-align: center;
     padding: 3rem;
   }
-  
+
   .question {
     margin-bottom: 2rem;
   }
-  
+
   .range-input {
     display: flex;
     align-items: center;
     gap: 1rem;
   }
-  
+
   .radio-options,
   .checkbox-options {
     display: flex;
@@ -127,7 +127,7 @@ const getQuestionComponent = (type) => {
     gap: 0.5rem;
     margin-top: 0.5rem;
   }
-  
+
   button[type="submit"] {
     background: #1a73e8;
     color: white;

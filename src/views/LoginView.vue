@@ -16,18 +16,18 @@
       </div>
     </div>
 </template>
-  
+
   <script setup>
   import { ref } from 'vue'
   import { useRouter } from 'vue-router'
   import axios from 'axios'
-  
+
   const router = useRouter()
   const credentials = ref({
     email: '',
     password: ''
   })
-  
+
   const handleLogin = async () => {
   try {
     const { data } = await axios.get('http://localhost:5012/users')
@@ -43,7 +43,7 @@
   }
 }
   </script>
-  
+
 <style scoped lang="scss">
   .login-container {
   display: flex;
@@ -52,7 +52,7 @@
   min-height: 100vh; /* Garante altura total */
   width: 100%; /* Ocupa largura total */
   padding: 20px; /* Espaço nas bordas em mobile */
-  
+
     .login-card {
       background: white;
       padding: 2rem;
@@ -60,36 +60,36 @@
       box-shadow: 0 2px 4px rgba(0,0,0,0.1);
       width: 100%;
       max-width: 400px;
-  
+
       h1 {
         text-align: center;
         margin-bottom: 2rem;
         color: #202124;
       }
-  
+
       .form-group {
         margin-bottom: 1.5rem;
-  
+
         label {
           display: block;
           margin-bottom: 0.5rem;
           color: #5f6368;
         }
-  
+
         input {
           width: 100%;
           padding: 10px;
           border: 1px solid #dadce0;
           border-radius: 4px;
           font-size: 16px;
-  
+
           &:focus {
             border-color: #1a73e8;
             outline: none;
           }
         }
       }
-  
+
       button {
         width: 100%;
         padding: 12px;
@@ -100,7 +100,7 @@
         cursor: pointer;
         font-size: 16px;
         transition: background 0.3s;
-  
+
         &:hover {
           background: #1557b0;
         }

@@ -25,7 +25,7 @@ const transporter = nodemailer.createTransport({
   secure: false, // TLS
   auth: {
     user: process.env.OUTLOOK_USER,
-    pass: process.env.OUTLOOK_PASS 
+    pass: process.env.OUTLOOK_PASS
   },
   tls: {
     ciphers: 'SSLv3',
@@ -65,7 +65,7 @@ const emailTemplate = (surveyId) => `
         .outlook-fallback-font { font-family: Arial, sans-serif; }
     </style>
     <![endif]-->
-    
+
     <!-- Layout baseado em tabelas para compatibilidade -->
     <table cellpadding="0" cellspacing="0" width="100%" style="background-color:#f7f9fc;">
         <tr>
@@ -109,17 +109,17 @@ const emailTemplate = (surveyId) => `
                                 <tr>
                                     <td style="padding:40px 0;text-align:center;">
                                         <!--[if mso]>
-                                        <v:roundrect xmlns:v="urn:schemas-microsoft-com:vml" href="{{survey_link}}" 
+                                        <v:roundrect xmlns:v="urn:schemas-microsoft-com:vml" href="{{survey_link}}"
                                             style="width:200px;height:48px;v-text-anchor:middle;"
-                                            arcsize="8%" 
-                                            strokecolor="#1a73e8" 
+                                            arcsize="8%"
+                                            strokecolor="#1a73e8"
                                             fillcolor="#1a73e8">
                                             <center style="color:#ffffff;font-family:Arial,sans-serif;font-size:16px;font-weight:bold;">
                                             Responder Pesquisa
                                             </center>
                                         </v:roundrect>
                                         <![endif]-->
-                                        <a href="http://localhost:5173/survey/${surveyId}" 
+                                        <a href="http://localhost:5173/survey/${surveyId}"
                                             style="background-color:#1a73e8;color:#ffffff;text-decoration:none;padding:14px 28px;border-radius:8px;font-family:Arial,sans-serif;font-size:16px;display:inline-block;mso-hide:all;">
                                             Responder Pesquisa
                                         </a>
@@ -135,10 +135,10 @@ const emailTemplate = (surveyId) => `
                             <table cellpadding="0" cellspacing="0" width="100%">
                                 <tr>
                                     <td align="center">
-                                        <img src="https://via.placeholder.com/150x40.png?text=MEDWARE+HealthSystems" 
-                                            width="150" 
-                                            height="40" 
-                                            alt="MEDWARE" 
+                                        <img src="https://via.placeholder.com/150x40.png?text=MEDWARE+HealthSystems"
+                                            width="150"
+                                            height="40"
+                                            alt="MEDWARE"
                                             style="border:0;height:auto;line-height:100%;outline:none;text-decoration:none;display:block;margin-bottom:15px;">
                                     </td>
                                 </tr>
@@ -187,12 +187,12 @@ app.post('/send-email', async (req, res) => {
 
     console.log('E-mail enviado:', info.messageId);
     res.json({ success: true, messageId: info.messageId });
-    
+
   } catch (error) {
     console.error('Erro detalhado:', error);
-    res.status(500).json({ 
+    res.status(500).json({
       error: 'Falha no envio',
-      details: error.response || error.message 
+      details: error.response || error.message
     });
   }
 });

@@ -40,7 +40,7 @@
 
       <!-- Botões de controle -->
       <div class="actions">
-        <button type="button" @click="addQuestion" class="add-button">Adicionar Pergunta</button>
+        <button type="button" @click="addQuestion" class="add-question-btn">Adicionar Pergunta</button>
         <button type="submit" class="submit-button">Salvar Pesquisa</button>
       </div>
     </form>
@@ -72,16 +72,20 @@
     </div>
   </div>
 </template>
-  
+
 <script setup>
 import { ref, onMounted } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import axios from 'axios'
 import { formatDate } from '@/utils/dateFormatter'
+import { useAlert } from '@/composables/useAlert';
 
 const route = useRoute()
 const router = useRouter()
 const surveyId = route.params.id
+
+const showAlert = useAlert()
+const MAX_QUESTIONS = 20;
 
 // Estado idêntico ao CreateSurveyView
 const survey = ref({
@@ -97,12 +101,31 @@ const loading = ref(true)
 
 // Métodos IDÊNTICOS ao CreateSurveyView
 const addQuestion = () => {
-  survey.value.questions.push({
-      text: "",
-      type: "range",
-      options: [],
+  if (survey.value.questions.length >= MAX_QUESTIONS) {
+    showAlert({
+      type: 'warning',
+      title: 'Limite Atingido',
+      text: `Máximo de ${MAX_QUESTIONS} perguntas por pesquisa.`,
+      duration: 5000
     });
-}
+    return;
+  }
+
+    survey.value.questions.push({
+      text: '',
+      type: 'range',
+      options: []
+    });
+
+    setTimeout(() => {
+    const container = document.querySelector('.questions-container');
+    container.scrollTo({
+        top: container.scrollHeight,
+        behavior: 'smooth'
+      });
+    }, 100);
+  };
+
 const removeQuestion = (index) => { survey.value.questions.splice(index, 1); }
 const addOption = (questionIndex) => {
   survey.value.questions[questionIndex].options.push({ text: "" });
@@ -110,27 +133,27 @@ const addOption = (questionIndex) => {
 const removeOption = (questionIndex, optionIndex) => {
    survey.value.questions[questionIndex].options.splice(optionIndex, 1);
  }
-const resetOptions = (question) => { 
+const resetOptions = (question) => {
   if (question.type === "range") {
       question.options = [];
-    } 
+    }
 }
 
 onMounted(async () => {
   try {
     const { data } = await axios.get(`http://localhost:5012/surveys/${surveyId}`)
-    
+
     // Garanta que todas as questões tenham a propriedade 'options'
     const questionsWithOptions = data.questions.map(question => ({
       ...question,
       options: question.options || []
     }))
-    
+
     survey.value = {
       ...data,
       questions: questionsWithOptions
     }
-    
+
   } catch (error) {
     console.error('Erro ao carregar pesquisa:', error)
     router.push('/dashboard/surveys')
@@ -142,17 +165,17 @@ onMounted(async () => {
 const handleSubmit = async () => {
   try {
     const user = JSON.parse(localStorage.getItem('user'))
-    
+
     const updatedData = {
       ...survey.value,
       updatedBy: user.email,
       updatedAt: formatDate
     }
-    
+
     await axios.put(`http://localhost:5012/surveys/${surveyId}`, updatedData)
     alert('Pesquisa atualizada com sucesso!')
     router.push('/dashboard/surveys')
-    
+
   } catch (error) {
     console.error('Erro ao atualizar:', error)
   }
@@ -172,16 +195,16 @@ const handleSubmit = async () => {
     flex: 1;
     max-width: 600px;
   }
-  
+
   .form-group {
     margin-bottom: 1rem;
   }
-  
+
   label {
     display: block;
     margin-bottom: 0.5rem;
   }
-  
+
   input[type="text"],
   select {
     width: 100%;
@@ -189,24 +212,32 @@ const handleSubmit = async () => {
     border: 1px solid #ccc;
     border-radius: 4px;
   }
-  
+
   .questions-container {
-    margin-top: 2rem;
+    max-height: 60vh; /* Limita a altura */
+    overflow-y: auto; /* Adiciona scroll vertical */
+    padding: 16px;
+    margin: 20px 0;
+    border: 1px solid #e2e8f0;
+    border-radius: 8px;
+    background: #ffffff;
+    scroll-behavior: smooth;
   }
-  
+
   .question-card {
-    border: 1px solid #ddd;
-    padding: 1rem;
-    margin-bottom: 1rem;
-    border-radius: 4px;
+    margin-bottom: 20px;
+    padding: 16px;
+    border: 1px solid #e2e8f0;
+    border-radius: 8px;
+    background: #f8fafc;
   }
-  
+
   .question-header {
     display: flex;
     justify-content: space-between;
     align-items: center;
   }
-  
+
   .remove-button {
     background: #ff4444;
     color: white;
@@ -215,7 +246,7 @@ const handleSubmit = async () => {
     border-radius: 4px;
     cursor: pointer;
   }
-  
+
   .add-button {
     background: #4caf50;
     color: white;
@@ -225,13 +256,13 @@ const handleSubmit = async () => {
     cursor: pointer;
     margin-top: 0.5rem;
   }
-  
+
   .actions {
     margin-top: 1rem;
     display: flex;
     gap: 1rem;
   }
-  
+
   .preview-container {
     flex: 1;
     max-width: 600px;
@@ -239,21 +270,21 @@ const handleSubmit = async () => {
     top: 20px;
     height: fit-content;
   }
-  
+
   .preview-card {
     border: 1px solid #ddd;
     padding: 1rem;
     border-radius: 4px;
   }
-  
+
   .preview-question {
     margin-bottom: 1rem;
   }
-  
+
   .range-input input {
     width: 100%;
   }
-  
+
   .radio-options,
   .checkbox-options {
     display: flex;

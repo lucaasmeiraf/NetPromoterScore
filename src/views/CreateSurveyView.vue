@@ -6,7 +6,7 @@
           <label>Título da Pesquisa</label>
           <input v-model="survey.title" type="text" required placeholder="Digite o título da pesquisa" />
         </div>
-  
+
         <!-- Lista de perguntas -->
         <div class="questions-container">
           <div v-for="(question, index) in survey.questions" :key="index" class="question-card">
@@ -26,7 +26,7 @@
                 <option value="checkbox">Múltipla Escolha (Checkbox)</option>
               </select>
             </div>
-  
+
             <!-- Opções para radio/checkbox -->
             <div v-if="question.type === 'radio' || question.type === 'checkbox'" class="options-container">
               <div v-for="(option, optionIndex) in question.options" :key="optionIndex" class="option-item">
@@ -37,14 +37,14 @@
             </div>
           </div>
         </div>
-  
+
         <!-- Botões de controle -->
         <div class="actions">
-          <button type="button" @click="addQuestion" class="add-button">Adicionar Pergunta</button>
+          <button type="button" @click="addQuestion" class="add-question-btn">Adicionar Pergunta</button>
           <button type="submit" class="submit-button">Salvar Pesquisa</button>
         </div>
       </form>
-  
+
       <!-- Pré-visualização da pesquisa -->
       <div class="preview-container">
         <h2>Pré-visualização</h2>
@@ -72,52 +72,74 @@
       </div>
     </div>
 </template>
-  
+
   <script setup>
   import { ref } from "vue";
   import axios from "axios";
   import { formatDate } from '@/utils/dateFormatter';
-  
+  import { useAlert } from '@/composables/useAlert';
+
   // Estado da pesquisa
   const survey = ref({
     title: "",
     questions: [],
   });
-  
+
+  const showAlert = useAlert()
+  const MAX_QUESTIONS = 20;
+
   // Adicionar nova pergunta
   const addQuestion = () => {
-    survey.value.questions.push({
-      text: "",
-      type: "range",
-      options: [],
+  if (survey.value.questions.length >= MAX_QUESTIONS) {
+    showAlert({
+      type: 'warning',
+      title: 'Limite Atingido',
+      text: `Máximo de ${MAX_QUESTIONS} perguntas por pesquisa.`,
+      duration: 5000
     });
+    return;
+  }
+
+    survey.value.questions.push({
+      text: '',
+      type: 'range',
+      options: []
+    });
+
+    setTimeout(() => {
+    const container = document.querySelector('.questions-container');
+    container.scrollTo({
+        top: container.scrollHeight,
+        behavior: 'smooth'
+      });
+    }, 100);
   };
-  
+
   // Remover pergunta
   const removeQuestion = (index) => {
     survey.value.questions.splice(index, 1);
   };
-  
+
   // Adicionar opção para radio/checkbox
   const addOption = (questionIndex) => {
     survey.value.questions[questionIndex].options.push({ text: "" });
   };
-  
+
   // Remover opção
   const removeOption = (questionIndex, optionIndex) => {
     survey.value.questions[questionIndex].options.splice(optionIndex, 1);
   };
-  
+
   // Resetar opções ao mudar o tipo de pergunta
   const resetOptions = (question) => {
     if (question.type === "range") {
       question.options = [];
     }
   };
-  
+
   // Salvar pesquisa no JSON Server
   const handleSubmit = async () => {
-    try { 
+    try {
     const user = JSON.parse(localStorage.getItem('user'))
     const surveyWithDate = {
       ...survey.value,
@@ -126,7 +148,7 @@
       updatedBy: user.email,
       updatedAt: formatDate
     }
-    
+
     await axios.post('http://localhost:5012/surveys', surveyWithDate)
     alert("Pesquisa salva com sucesso!")
     survey.value = { title: "", questions: [] }
@@ -136,7 +158,7 @@
   }
 }
   </script>
-  
+
 <style scoped>
   .create-survey-container {
     display: grid;
@@ -153,17 +175,17 @@
     border-radius: 12px;
     box-shadow: 0 2px 4px rgba(0,0,0,0.1);
   }
-  
+
   .form-section {
     flex: 1;
     max-width: 600px;
   }
-  
+
   label {
     display: block;
     margin-bottom: 0.5rem;
   }
-  
+
   input[type="text"],
   select {
     width: 100%;
@@ -171,24 +193,49 @@
     border: 1px solid #ccc;
     border-radius: 4px;
   }
-  
+
   .questions-container {
-    margin-top: 2rem;
+    max-height: 60vh; /* Limita a altura */
+    overflow-y: auto; /* Adiciona scroll vertical */
+    padding: 16px;
+    margin: 20px 0;
+    border: 1px solid #e2e8f0;
+    border-radius: 8px;
+    background: #ffffff;
+    scroll-behavior: smooth;
   }
-  
+
   .question-card {
-    border: 1px solid #ddd;
-    padding: 1rem;
-    margin-bottom: 1rem;
-    border-radius: 4px;
+    margin-bottom: 20px;
+    padding: 16px;
+    border: 1px solid #e2e8f0;
+    border-radius: 8px;
+    background: #f8fafc;
   }
-  
+
   .question-header {
     display: flex;
     justify-content: space-between;
     align-items: center;
   }
-  
+
+  .add-question-btn {
+    position: sticky;
+    bottom: 20px;
+    background: #1a73e8;
+    color: white;
+    padding: 12px 24px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+    transition: background 0.3s;
+}
+
+.add-question-btn:hover {
+  background: #1557b0;
+}
+
   .remove-button {
     background: #ff4444;
     color: white;
@@ -197,7 +244,7 @@
     border-radius: 4px;
     cursor: pointer;
   }
-  
+
   .add-button {
     background: #4caf50;
     color: white;
@@ -207,13 +254,13 @@
     cursor: pointer;
     margin-top: 0.5rem;
   }
-  
+
   .actions {
     margin-top: 1rem;
     display: flex;
     gap: 1rem;
   }
-  
+
   .preview-container {
     flex: 1;
     max-width: 600px;
@@ -221,21 +268,21 @@
     top: 20px;
     height: fit-content;
   }
-  
+
   .preview-card {
     border: 1px solid #ddd;
     padding: 1rem;
     border-radius: 4px;
   }
-  
+
   .preview-question {
     margin-bottom: 1rem;
   }
-  
+
   .range-input input {
     width: 100%;
   }
-  
+
   .radio-options,
   .checkbox-options {
     display: flex;

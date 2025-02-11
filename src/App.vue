@@ -1,6 +1,16 @@
 <!-- src/App.vue -->
 <template>
   <router-view />
+
+  <!-- Container de Alertas -->
+  <div class="alerts-container">
+    <Alert
+      v-for="alert in alerts"
+      :key="alert.id"
+      v-bind="alert"
+      @close="closeAlert(alert.id)"
+    />
+  </div>
 </template>
 
 <script setup>
@@ -8,6 +18,7 @@ import { useAlert } from '@/composables/useAlert';
 import Alert from '@/components/Alert.vue';
 
 const { alerts, closeAlert } = useAlert();
+
 // Seu script (se necessário)
 </script>
 
@@ -57,7 +68,7 @@ body {
 
   .dashboard-layout {
     flex-direction: column;
-    
+
     .sidebar {
       width: 100%;
       border-right: none;
