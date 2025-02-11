@@ -12,6 +12,11 @@ const PORT = process.env.PORT || 5013; // Usando sua porta 5013
 app.use(cors());
 app.use(express.json());
 
+const asyncHandler = fn => (req, res, next) => {
+    Promise.resolve(fn(req, res, next))
+      .catch(next);
+  };
+
 // Verificação de credenciais carregadas
 console.log('Credenciais Outlook:', {
   user: process.env.OUTLOOK_USER,
@@ -167,6 +172,10 @@ const emailTemplate = (surveyId) => `
 app.post('/send-email', async (req, res) => {
   const { to, surveyId } = req.body;
 
+  if (!to || !surveyId) {
+    return res.status(400).json({ error: 'Dados incompletos' });
+  }
+
   try {
     const info = await transporter.sendMail({
       from: `"Medware Sistemas Médicos" <${process.env.OUTLOOK_USER}>`,
@@ -203,6 +212,12 @@ app.use(cors({
     allowedHeaders: ['Content-Type']
   }));
 
-app.listen(PORT, () => {
-  console.log(`✅ Servidor rodando em http://localhost:${PORT}`);
-});
+// Error handling global
+app.use((err, req, res, next) => {
+    console.error('Erro não tratado:', err);
+    res.status(500).json({ error: 'Falha interna' });
+  });
+  
+  app.listen(PORT, () => {
+    console.log(`Servidor rodando na porta ${PORT}`);
+  });
