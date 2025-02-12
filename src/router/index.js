@@ -43,12 +43,18 @@ const routes = [
         component: () => import('../views/ResponsesView.vue')
       },
       {
+        path: 'responses/:surveyId',
+        name: 'Dashboard da Pesquisa',
+        component: () => import('../views/SurveyDashboardView.vue')
+      },
+      {
         path: 'edit-survey/:id',
         name: 'Editar Pesquisa',
         component: () => import('../views/EditSurveyView.vue')
       }
     ]
-  }
+  },
+  
 ]
 
 const router = createRouter({

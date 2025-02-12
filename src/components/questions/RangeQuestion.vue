@@ -39,9 +39,9 @@ const props = defineProps({
       options: {
         min: 0,
         max: 10,
-        minLabel: 'Nunca recomendaria',
-        maxLabel: 'Recomendaria com certeza',
-        valueLabel: 'Sua avaliação NPS'
+        minLabel: '0',
+        maxLabel: '10',
+        valueLabel: ''
       }
     })
   }

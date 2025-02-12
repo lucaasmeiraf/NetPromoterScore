@@ -52,9 +52,11 @@
   const props = defineProps(['surveyId'])
 
   const emails = ref('')
+  const sending = ref(false)
 
   const handleSubmit = async () => {
   try {
+    sending.value = true
     const recipients = emails.value.split(',').map(e => e.trim());
 
     // Envio para cada destinatário
@@ -73,7 +75,7 @@
     });
     setTimeout(() => {
       emit('close');
-    }, 300)
+    }, 100)
 
 
     } catch (error) {
@@ -84,6 +86,8 @@
         duration: 8000
       });
       console.log(error)
+    }finally{
+      sending.value = false
     }
 };
 

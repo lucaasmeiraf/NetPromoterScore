@@ -173,6 +173,38 @@
         }
       ],
       "respondedAt": "2025-02-11T23:59:38.818Z"
+    },
+    {
+      "id": "b6bf",
+      "surveyId": "2eb6",
+      "answers": [
+        10,
+        "Sim, por completo",
+        [
+          "Lucas"
+        ],
+        "Técnico incrível, consegui solucionar todos os meus problemas."
+      ],
+      "clientId": "d1e6f404-64b8-42c7-b807-bfd8949bf7b3",
+      "questions": [
+        {
+          "text": "Qual o nível de satisfação do atendimento?",
+          "type": "range"
+        },
+        {
+          "text": "O problema foi solucionado?",
+          "type": "radio"
+        },
+        {
+          "text": "Qual Técnico realizou o seu atendimento?",
+          "type": "checkbox"
+        },
+        {
+          "text": "Fale mais um pouco sobre o seu atendimento:",
+          "type": "text"
+        }
+      ],
+      "respondedAt": "2025-02-12T15:04:21.329Z"
     }
   ],
   "emails": []

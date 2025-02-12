@@ -54,7 +54,7 @@
         <div v-for="(question, index) in survey.questions" :key="index" class="preview-question">
           <p>{{ question.text || "Texto da pergunta" }}</p>
           <div v-if="question.type === 'range'" class="range-input">
-            <input type="range" min="0" max="10" />
+            <RangeQuestion />
           </div>
           <div v-if="question.type === 'radio'" class="radio-options">
             <label v-for="(option, optionIndex) in question.options" :key="optionIndex">
@@ -83,6 +83,7 @@ import { useRoute, useRouter } from 'vue-router'
 import axios from 'axios'
 import { formatDate } from '@/utils/dateFormatter'
 import useAlert from '@/composables/useAlert';
+import RangeQuestion from '@/components/questions/RangeQuestion.vue';
 
 const route = useRoute()
 const router = useRouter()
@@ -194,21 +195,25 @@ const handleSubmit = async () => {
 </script>
 
   <style scoped>
-  .create-survey-container {
-    display: flex;
+ .create-survey-container {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
     gap: 2rem;
     max-width: 1200px;
     margin: 0 auto;
-    padding: 20px;
+    padding: 2rem;
+  }
+
+  .form-section, .preview-container {
+    background: white;
+    padding: 1.5rem;
+    border-radius: 12px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
   }
 
   .form-section {
     flex: 1;
     max-width: 600px;
-  }
-
-  .form-group {
-    margin-bottom: 1rem;
   }
 
   label {
@@ -249,6 +254,41 @@ const handleSubmit = async () => {
     align-items: center;
   }
 
+  .add-question-btn {
+    position: sticky;
+    bottom: 20px;
+    background: #1a73e8;
+    color: white;
+    padding: 12px 24px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+    transition: background 0.3s;
+}
+
+.add-question-btn:hover {
+  background: #1557b0;
+}
+
+.submit-button{
+  position: sticky;
+  bottom: 20px;
+  background: #28c45c;
+  color: white;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+  transition: background 0.3s;
+}
+
+.submit-button:hover{
+    bottom: 20px;
+    background: #28a752;
+  }
+
   .remove-button {
     background: #ff4444;
     color: white;
@@ -266,42 +306,6 @@ const handleSubmit = async () => {
     border-radius: 4px;
     cursor: pointer;
     margin-top: 0.5rem;
-  }
-
-  .add-question-btn {
-    position: sticky;
-    bottom: 20px;
-    background: #1a73e8;
-    color: white;
-    padding: 12px 24px;
-    border: none;
-    border-radius: 8px;
-    cursor: pointer;
-    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-    transition: background 0.3s;
-  }
-
-.add-question-btn:hover {
-  background: #1557b0;
-}
-
-
-  .submit-button{
-    position: sticky;
-    bottom: 20px;
-    background: #28c45c;
-    color: white;
-    padding: 10px 20px;
-    border: none;
-    border-radius: 8px;
-    cursor: pointer;
-    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-    transition: background 0.3s;
-  }
-
-  .submit-button:hover{
-    bottom: 20px;
-    background: #28a752;
   }
 
   .actions {
@@ -347,4 +351,15 @@ const handleSubmit = async () => {
     min-height: 100px;
     resize: vertical;
   }
-</style>
+
+  textarea::placeholder {
+    color: #999;
+    font-style: italic;
+  }
+
+  @media (max-width: 768px) {
+    .create-survey-container {
+      grid-template-columns: 1fr;
+    }
+  }
+  </style>

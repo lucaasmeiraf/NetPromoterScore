@@ -64,7 +64,7 @@ import useAlert from '@/composables/useAlert'
 import RangeQuestion from '@/components/questions/RangeQuestion.vue'
 import RadioQuestion from '@/components/questions/RadioQuestion.vue'
 import CheckboxQuestion from '@/components/questions/CheckboxQuestion.vue'
-import TextQuestion from '@/components/TextQuestion.vue'
+import TextQuestion from '@/components/questions/TextQuestion.vue'
 
 const route = useRoute()
 const router = useRouter()
@@ -179,12 +179,13 @@ onMounted(async () => {
   display: flex;
   flex-direction: column;
   align-items: center;
+  height: fit-content;
 }
 
 /* Card da pesquisa */
 .survey-card {
   width: 100%;
-  max-width: 520px;
+  max-width: 499px;
   background: white;
   border-radius: 12px;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
@@ -283,6 +284,12 @@ button[type="submit"]:hover {
   z-index: 999;
   backdrop-filter: blur(2px);
 }
+
+.survey-card {
+    border: 1px solid #ddd;
+    padding: 1rem;
+    border-radius: 4px;
+  }
 
 /* Ajustes responsivos */
 @media (max-width: 768px) {

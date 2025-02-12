@@ -54,7 +54,7 @@
           <div v-for="(question, index) in survey.questions" :key="index" class="preview-question">
             <p>{{ question.text || "Texto da pergunta" }}</p>
             <div v-if="question.type === 'range'" class="range-input">
-              <input type="range" min="0" max="10" />
+              <RangeQuestion />
             </div>
             <div v-if="question.type === 'radio'" class="radio-options">
               <label v-for="(option, optionIndex) in question.options" :key="optionIndex">
@@ -82,6 +82,7 @@
   import axios from "axios";
   import { formatDate } from '@/utils/dateFormatter';
   import useAlert from '@/composables/useAlert';
+  import RangeQuestion from '@/components/questions/RangeQuestion.vue';
 
   // Estado da pesquisa
   const survey = ref({

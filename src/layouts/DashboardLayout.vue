@@ -17,6 +17,14 @@
         </div>
         <button @click="handleLogout">Sair</button>
       </header>
+      <!-- <div class="dashboard-page">
+        <div class="chart-grid">
+          <NpsScoreChart />
+          <ResponseTrendChart />
+          <DepartmentDistributionChart />
+          <QuestionTypeChart />
+        </div>
+      </div> -->
       <router-view />
     </main>
   </div>
@@ -25,6 +33,9 @@
 <script setup>
   import { computed } from 'vue'
   import { useRouter, useRoute  } from 'vue-router'
+  // import NpsScoreChart from '@/components/charts/NpsScoreChart.vue'
+  // import ResponseTrendChart from '@/components/charts/ResponseTrendChart.vue'
+
 
   const router = useRouter()
   const route = useRoute()
@@ -122,6 +133,22 @@
           border-radius: 4px;
           cursor: pointer;
         }
+      }
+    }
+
+    .dashboard-page {
+      padding: 2rem;
+    }
+
+    .chart-grid {
+      display: grid;
+      gap: 1.5rem;
+      grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+    }
+
+    @media (max-width: 768px) {
+      .chart-grid {
+        grid-template-columns: 1fr;
       }
     }
   }

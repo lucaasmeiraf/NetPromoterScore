@@ -8,6 +8,16 @@ a,
   padding: 3px;
 }
 
+.apexcharts-tooltip {
+  box-shadow: 0 2px 6px rgba(0,0,0,0.1) !important;
+  border-radius: 6px !important;
+}
+
+.apexcharts-menu {
+  border: 0 !important;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1) !important;
+}
+
 @media (hover: hover) {
   a:hover {
     background-color: hsla(160, 100%, 37%, 0.2);
