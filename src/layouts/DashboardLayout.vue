@@ -1,6 +1,6 @@
 <template>
   <div class="dashboard-layout">
-    <aside class="sidebar">
+    <aside v-if="!$route.meta.publicPage" class="sidebar">
       <nav>
         <!-- Adicione este novo link -->
         <router-link to="/dashboard/create-survey">Criar Nova Pesquisa</router-link>
@@ -8,7 +8,7 @@
         <router-link to="/dashboard/responses">Respostas</router-link>
       </nav>
     </aside>
-    
+
     <main class="content">
       <header v-if="!$route.meta.publicPage" class="header">
         <div class="header-left">
@@ -21,11 +21,11 @@
     </main>
   </div>
 </template>
-  
+
 <script setup>
   import { computed } from 'vue'
   import { useRouter, useRoute  } from 'vue-router'
-  
+
   const router = useRouter()
   const route = useRoute()
 
@@ -40,40 +40,40 @@
   const goBack = () => {
     router.go(-1)
   }
-  
+
   const handleLogout = () => {
     localStorage.removeItem('isAuthenticated')
     router.push('/')
   }
 </script>
-  
+
 <style scoped lang="scss">
   .dashboard-layout {
     display: flex;
     min-height: 100vh;
-  
+
     .sidebar {
       width: 250px;
       background: #fff;
       border-right: 1px solid #dadce0;
       padding: 1rem;
-  
+
       nav {
         display: flex;
         flex-direction: column;
         gap: 0.5rem;
-  
+
         a {
           padding: 10px;
           border-radius: 4px;
           color: #202124;
           text-decoration: none;
           transition: background 0.3s;
-  
+
           &:hover {
             background: #f1f3f4;
           }
-  
+
           &.router-link-exact-active {
             background: #e8f0fe;
             color: #1967d2;
@@ -96,11 +96,11 @@
       border-radius: 4px;
       cursor: pointer;
     }
-  
+
     .content {
       flex: 1;
       background: #f8f9fa;
-  
+
       .header {
         display: flex;
         justify-content: space-between;
@@ -108,12 +108,12 @@
         padding: 1rem;
         background: white;
         border-bottom: 1px solid #dadce0;
-  
+
         h1 {
           font-size: 1.5rem;
           color: #202124;
         }
-  
+
         button {
           padding: 8px 16px;
           background: #dc3545;

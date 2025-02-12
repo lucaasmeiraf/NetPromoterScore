@@ -6,11 +6,17 @@ import dotenv from 'dotenv';
 dotenv.config();
 
 const app = express();
-const PORT = process.env.PORT || 5013; // Usando sua porta 5013
+const PORT = 5013; // Usando sua porta 5013
 
 // Middlewares
 app.use(cors());
 app.use(express.json());
+
+app.use(cors({
+  origin: 'http://localhost:5173', // URL exata do frontend
+  methods: ['POST', 'GET'],
+  allowedHeaders: ['Content-Type']
+}));
 
 const asyncHandler = fn => (req, res, next) => {
     Promise.resolve(fn(req, res, next))
@@ -149,9 +155,9 @@ const emailTemplate = (surveyId) => `
                                 </tr>
                                 <tr>
                                     <td class="outlook-fallback-font" style="color:#718096;font-family:Arial,sans-serif;font-size:12px;text-align:center;">
-                                        MEDWARE Health Systems LTDA<br>
-                                        Rua dos Equipamentos Médicos, 456 - São Paulo/SP<br>
-                                        CNPJ: 11.222.333/0001-44
+                                        MEDWARE Sistemas Médicos LTDA<br>
+                                        SIBS Quadra 1 Conjunto C Lotes 3, 5, 7 e 9 Ed. NovaData, 1o. Andar - Núcleo Bandeirante, Brasília<br>
+                                        CNPJ: 01.473.103/0001-31
                                     </td>
                                 </tr>
                             </table>
@@ -169,7 +175,8 @@ const emailTemplate = (surveyId) => `
 `;
 
 // Rota de envio de e-mails
-app.post('/send-email', async (req, res) => {
+// Rota de envio de e-mails corrigida
+app.post('/send-email', asyncHandler(async (req, res) => {
   const { to, surveyId } = req.body;
 
   if (!to || !surveyId) {
@@ -184,40 +191,34 @@ app.post('/send-email', async (req, res) => {
       html: emailTemplate(surveyId)
     });
 
-    res.status(200).json({
-        success: true,
-        message: 'E-mail enfileirado para envio',
-        details: {
-          messageId: info.messageId,
-          accepted: info.accepted,
-          rejected: info.rejected
-        }
-    });
-
     console.log('E-mail enviado:', info.messageId);
-    res.json({ success: true, messageId: info.messageId });
+
+    return res.status(200).json({
+      success: true,
+      message: 'E-mail enfileirado para envio',
+      details: {
+        messageId: info.messageId,
+        accepted: info.accepted,
+        rejected: info.rejected
+      }
+    });
 
   } catch (error) {
     console.error('Erro detalhado:', error);
-    res.status(500).json({
+    return res.status(500).json({
       error: 'Falha no envio',
       details: error.response || error.message
     });
   }
-});
+}));
 
-app.use(cors({
-    origin: 'http://localhost:5173', // URL exata do frontend
-    methods: ['POST', 'GET'],
-    allowedHeaders: ['Content-Type']
-  }));
 
 // Error handling global
 app.use((err, req, res, next) => {
     console.error('Erro não tratado:', err);
     res.status(500).json({ error: 'Falha interna' });
   });
-  
+
   app.listen(PORT, () => {
     console.log(`Servidor rodando na porta ${PORT}`);
   });

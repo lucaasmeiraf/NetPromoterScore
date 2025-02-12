@@ -5,25 +5,25 @@
       <form @submit.prevent="handleSubmit">
         <div class="form-group">
           <label>E-mails dos Destinatários (separados por vírgula)</label>
-          <textarea 
-            v-model="emails" 
-            required 
+          <textarea
+            v-model="emails"
+            required
             rows="4"
             placeholder="exemplo1@email.com, exemplo2@provedor.com.br"
           ></textarea>
         </div>
 
         <div class="modal-actions">
-          <button 
-            type="button" 
-            @click="close" 
+          <button
+            type="button"
+            @click="close"
             class="cancel-button"
           >
             Cancelar
           </button>
-          
-          <button 
-            type="submit" 
+
+          <button
+            type="submit"
             class="confirm-button"
             :disabled="sending"
           >
@@ -71,8 +71,10 @@
       text: `${recipients.length} e-mail(s) enviado(s) com sucesso.`,
       duration: 5000
     });
+    setTimeout(() => {
+      emit('close');
+    }, 300)
 
-    //emit('close');
 
     } catch (error) {
       showAlert({
