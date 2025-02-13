@@ -81,7 +81,6 @@
 import { ref, onMounted } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import axios from 'axios'
-import { formatDate } from '@/utils/dateFormatter'
 import useAlert from '@/composables/useAlert';
 import RangeQuestion from '@/components/questions/RangeQuestion.vue';
 
@@ -174,7 +173,7 @@ const handleSubmit = async () => {
     const updatedData = {
       ...survey.value,
       updatedBy: user.email,
-      updatedAt: formatDate
+      updatedAt: new Date().toISOString()
     }
 
     await axios.put(`http://localhost:5012/surveys/${surveyId}`, updatedData)

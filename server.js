@@ -147,7 +147,7 @@ const emailTemplate = (surveyId) => `
                                 <tr>
                                     <td align="center">
                                         <img src="https://via.placeholder.com/150x40.png?text=MEDWARE+HealthSystems"
-                                            width="150"
+                                      npm      width="150"
                                             height="40"
                                             alt="MEDWARE"
                                             style="border:0;height:auto;line-height:100%;outline:none;text-decoration:none;display:block;margin-bottom:15px;">

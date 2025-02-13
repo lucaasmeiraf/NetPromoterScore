@@ -80,7 +80,6 @@
   <script setup>
   import { ref } from "vue";
   import axios from "axios";
-  import { formatDate } from '@/utils/dateFormatter';
   import useAlert from '@/composables/useAlert';
   import RangeQuestion from '@/components/questions/RangeQuestion.vue';
 
@@ -149,9 +148,9 @@
     const surveyWithDate = {
       ...survey.value,
       createdBy: user.email,
-      createdAt: formatDate,
+      createdAt: new Date().toISOString(),
       updatedBy: user.email,
-      updatedAt: formatDate
+      updatedAt: new Date().toISOString()
     }
 
     await axios.post('http://localhost:5012/surveys', surveyWithDate)

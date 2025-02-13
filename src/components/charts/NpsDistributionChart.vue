@@ -1,7 +1,7 @@
 <!-- src/components/charts/NpsDistributionChart.vue -->
 <template>
   <BaseChart
-    title="Distribuição NPS"
+    title="Dashboard"
     type="donut"
     :series="series"
     :options="chartOptions"
@@ -33,7 +33,7 @@ const chartOptions = ref({
 onMounted(async () => {
   try {
     const { data } = await axios.get(`http://localhost:5012/responses?surveyId=${props.surveyId}`)
-    
+
     const distribution = data.reduce((acc, response) => {
       const score = response.answers.find(a => a.type === 'nps')?.value
       if (score <= 6) acc[0]++

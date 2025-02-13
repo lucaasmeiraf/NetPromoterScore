@@ -33,8 +33,6 @@
 <script setup>
   import { computed } from 'vue'
   import { useRouter, useRoute  } from 'vue-router'
-  // import NpsScoreChart from '@/components/charts/NpsScoreChart.vue'
-  // import ResponseTrendChart from '@/components/charts/ResponseTrendChart.vue'
 
 
   const router = useRouter()
@@ -45,12 +43,27 @@
   })
 
   const showBackButton = computed(() => {
-    return !route.path.includes('/dashboard/surveys')
+  // Mostrar apenas quando não estiver na página principal
+    return ![
+      'Dashboard',
+      'Respostas',
+      'Pesquisas',
+      'Criar Pesquisa'
+    ].includes(route.name)
   })
 
   const goBack = () => {
+  if (route.path.startsWith('/dashboard/responses')) {
+    // Navegação explícita para a lista de respostas
+    router.push({ name: 'Respostas' })
+  } else if (route.matched.some(r => r.meta.requiresAuth)) {
+    // Volta para o dashboard principal se possível
+    router.push({ name: 'Dashboard da Pesquisa' })
+  } else {
+    // Fallback seguro
     router.go(-1)
   }
+}
 
   const handleLogout = () => {
     localStorage.removeItem('isAuthenticated')

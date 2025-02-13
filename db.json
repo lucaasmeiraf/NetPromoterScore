@@ -62,7 +62,8 @@
         }
       ],
       "createdBy": "admin@nps.com",
-      "updatedBy": "admin@nps.com"
+      "updatedBy": "admin@nps.com",
+      "updatedAt": "2025-02-13T00:32:34.297Z"
     },
     {
       "id": "057f",
@@ -107,7 +108,8 @@
         }
       ],
       "createdBy": "admin@nps.com",
-      "updatedBy": "admin@nps.com"
+      "updatedBy": "admin@nps.com",
+      "updatedAt": "2025-02-13T00:32:39.993Z"
     }
   ],
   "responses": [
@@ -205,6 +207,102 @@
         }
       ],
       "respondedAt": "2025-02-12T15:04:21.329Z"
+    },
+    {
+      "id": "22ea",
+      "surveyId": "2eb6",
+      "answers": [
+        9,
+        "Parcialmente resolvido",
+        [
+          "Lucas"
+        ],
+        "teste"
+      ],
+      "clientId": "d311c814-765a-4b16-9d36-32a70aec24fa",
+      "questions": [
+        {
+          "text": "Qual o nível de satisfação do atendimento?",
+          "type": "range"
+        },
+        {
+          "text": "O problema foi solucionado?",
+          "type": "radio"
+        },
+        {
+          "text": "Qual Técnico realizou o seu atendimento?",
+          "type": "checkbox"
+        },
+        {
+          "text": "Fale mais um pouco sobre o seu atendimento:",
+          "type": "text"
+        }
+      ],
+      "respondedAt": "2025-02-12T23:35:22.959Z"
+    },
+    {
+      "id": "ebe7",
+      "surveyId": "057f",
+      "answers": [
+        4,
+        [
+          "Renato"
+        ],
+        "Nao gostei do atendimento, valor alto, nao tenho equipamento para suportar o medware",
+        "Estou conhecendo"
+      ],
+      "clientId": "d311c814-765a-4b16-9d36-32a70aec24fa",
+      "questions": [
+        {
+          "text": "Quanto você indicaria a Medware para parceiros?",
+          "type": "range"
+        },
+        {
+          "text": "Quem realizou o seu atendimento?",
+          "type": "checkbox"
+        },
+        {
+          "text": "Agora em poucas palavras, como avaliaria o nosso atendimento?",
+          "type": "text"
+        },
+        {
+          "text": "É cliente Medware?",
+          "type": "radio"
+        }
+      ],
+      "respondedAt": "2025-02-12T23:55:55.245Z"
+    },
+    {
+      "id": "c57e",
+      "surveyId": "2eb6",
+      "answers": [
+        10,
+        "Parcialmente resolvido",
+        [
+          "Lucas"
+        ],
+        ""
+      ],
+      "clientId": "d311c814-765a-4b16-9d36-32a70aec24fa",
+      "questions": [
+        {
+          "text": "Qual o nível de satisfação do atendimento?",
+          "type": "range"
+        },
+        {
+          "text": "O problema foi solucionado?",
+          "type": "radio"
+        },
+        {
+          "text": "Qual Técnico realizou o seu atendimento?",
+          "type": "checkbox"
+        },
+        {
+          "text": "Fale mais um pouco sobre o seu atendimento:",
+          "type": "text"
+        }
+      ],
+      "respondedAt": "2025-02-13T00:14:55.157Z"
     }
   ],
   "emails": []

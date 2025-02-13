@@ -1,7 +1,7 @@
 <template>
   <div class="responses-view">
     <div class="survey-grid">
-      <SurveyCard 
+      <SurveyCard
         v-for="survey in surveys"
         :key="survey.id"
         :survey="survey"
@@ -20,11 +20,11 @@ const surveys = ref([])
 onMounted(async () => {
   try {
     const { data } = await axios.get('http://localhost:5012/surveys?_embed=responses')
-    
+
     surveys.value = data.map(survey => ({
       ...survey,
       responseCount: survey.responses?.length || 0,
-      lastResponse: survey.responses?.length 
+      lastResponse: survey.responses?.length
         ? Math.max(...survey.responses.map(r => new Date(r.respondedAt)))
         : null
     }))
