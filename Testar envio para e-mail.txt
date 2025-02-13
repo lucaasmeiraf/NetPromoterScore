@@ -1,5 +1,0 @@
-Testar envio para e-mail: 
-
-curl -X POST http://localhost:5013/send-email \
-  -H "Content-Type: application/json" \
-  -d '{"to": "lucas@medware.com.br", "surveyId": "123"}'
