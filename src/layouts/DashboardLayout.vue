@@ -17,15 +17,7 @@
         </div>
         <button @click="handleLogout">Sair</button>
       </header>
-      <!-- <div class="dashboard-page">
-        <div class="chart-grid">
-          <NpsScoreChart />
-          <ResponseTrendChart />
-          <DepartmentDistributionChart />
-          <QuestionTypeChart />
-        </div>
-      </div> -->
-      <router-view />
+      <router-view></router-view>
     </main>
   </div>
 </template>
@@ -53,17 +45,18 @@
   })
 
   const goBack = () => {
-  if (route.path.startsWith('/dashboard/responses')) {
-    // Navegação explícita para a lista de respostas
-    router.push({ name: 'Respostas' })
-  } else if (route.matched.some(r => r.meta.requiresAuth)) {
-    // Volta para o dashboard principal se possível
-    router.push({ name: 'Dashboard da Pesquisa' })
-  } else {
-    // Fallback seguro
-    router.go(-1)
+    // Substitua por navegação explícita
+    if (route.name === 'SurveyDashboard') {
+      router.push({ name: 'Respostas' })
+    } else {
+      // Verifica se há histórico válido
+      if (window.history.state?.back) {
+        router.go(-1)
+      } else {
+        router.push({ name: 'Dashboard' })
+      }
+    }
   }
-}
 
   const handleLogout = () => {
     localStorage.removeItem('isAuthenticated')

@@ -62,6 +62,7 @@
       console.error('Erro ao carregar pesquisa:', error)
     }
   })
+
   </script>
 
   <style scoped>
