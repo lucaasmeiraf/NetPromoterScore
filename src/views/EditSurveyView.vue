@@ -229,7 +229,7 @@ const handleSubmit = async () => {
   }
 
   .questions-container {
-    max-height: 60vh; /* Limita a altura */
+    max-height: 65vh; /* Limita a altura */
     overflow-y: auto; /* Adiciona scroll vertical */
     padding: 16px;
     margin: 20px 0;
@@ -314,6 +314,8 @@ const handleSubmit = async () => {
   }
 
   .preview-container {
+    max-height: 85vh; /* Limita a altura */
+    overflow-y: auto; /* Adiciona scroll vertical */
     flex: 1;
     max-width: 600px;
     position: sticky;

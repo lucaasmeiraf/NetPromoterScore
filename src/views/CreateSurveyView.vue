@@ -204,7 +204,7 @@
   }
 
   .questions-container {
-    max-height: 60vh; /* Limita a altura */
+    max-height: 65vh; /* Limita a altura */
     overflow-y: auto; /* Adiciona scroll vertical */
     padding: 16px;
     margin: 20px 0;
@@ -291,6 +291,8 @@
   .preview-container {
     flex: 1;
     max-width: 600px;
+    max-height: 85vh; /* Limita a altura */
+    overflow-y: auto; /* Adiciona scroll vertical */
     position: sticky;
     top: 20px;
     height: fit-content;

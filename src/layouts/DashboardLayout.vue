@@ -17,6 +17,7 @@
         </div>
         <button @click="handleLogout">Sair</button>
       </header>
+      
       <router-view></router-view>
     </main>
   </div>
