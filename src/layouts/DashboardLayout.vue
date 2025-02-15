@@ -53,17 +53,12 @@
   })
 
   const goBack = () => {
-  if (route.path.startsWith('/dashboard/responses')) {
-    // Navegação explícita para a lista de respostas
-    router.push({ name: 'Respostas' })
-  } else if (route.matched.some(r => r.meta.requiresAuth)) {
-    // Volta para o dashboard principal se possível
-    router.push({ name: 'Dashboard da Pesquisa' })
-  } else {
-    // Fallback seguro
-    router.go(-1)
+    if (route.name === 'Dashboard da Pesquisa') {
+      router.push({ name: 'Respostas' })
+    } else {
+      router.go(-1)
+    }
   }
-}
 
   const handleLogout = () => {
     localStorage.removeItem('isAuthenticated')
