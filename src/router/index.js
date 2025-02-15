@@ -1,7 +1,6 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import LoginView from '../views/LoginView.vue'
 import DashboardLayout from '../layouts/DashboardLayout.vue'
-import SurveyAlreadySubmitted from '@/views/SurveyAlreadySubmitted.vue' // Corrigir nome do componente
 
 const routes = [
   {
@@ -19,11 +18,12 @@ const routes = [
   {
     path: '/survey/already-submitted',
     name: 'SurveyAlreadySubmitted',
-    component: SurveyAlreadySubmitted
+    component: () => import('../views/SurveyAlreadySubmitted.vue') 
   },
   // Rotas do dashboard
   {
     path: '/dashboard',
+    name: 'Dashboard',
     component: DashboardLayout,
     meta: { requiresAuth: true },
     children: [
@@ -38,15 +38,16 @@ const routes = [
         component: () => import('../views/SurveysView.vue')
       },
       {
+        path: 'responses/:surveyId',
+        name: 'SurveyDashboard',
+        component: () => import('../views/SurveyDashboardView.vue'),
+        props: (route) => ({ surveyId: route.params.surveyId }),
+        meta: { requiresAuth: true }
+      },
+      {
         path: 'responses',
         name: 'Respostas',
         component: () => import('../views/ResponsesView.vue')
-      },
-      {
-        path: 'responses/:surveyId',
-        name: 'Dashboard da Pesquisa',
-        component: () => import('../views/SurveyDashboardView.vue'),
-        meta: { requiresAuth: true }
       },
       {
         path: 'edit-survey/:id',

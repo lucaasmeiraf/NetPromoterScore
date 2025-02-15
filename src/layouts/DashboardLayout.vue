@@ -17,15 +17,7 @@
         </div>
         <button @click="handleLogout">Sair</button>
       </header>
-      <!-- <div class="dashboard-page">
-        <div class="chart-grid">
-          <NpsScoreChart />
-          <ResponseTrendChart />
-          <DepartmentDistributionChart />
-          <QuestionTypeChart />
-        </div>
-      </div> -->
-      <router-view />
+      <router-view></router-view>
     </main>
   </div>
 </template>
@@ -53,10 +45,23 @@
   })
 
   const goBack = () => {
+<<<<<<< HEAD
     if (route.name === 'Dashboard da Pesquisa') {
       router.push({ name: 'Respostas' })
     } else {
       router.go(-1)
+=======
+    // Substitua por navegação explícita
+    if (route.name === 'SurveyDashboard') {
+      router.push({ name: 'Respostas' })
+    } else {
+      // Verifica se há histórico válido
+      if (window.history.state?.back) {
+        router.go(-1)
+      } else {
+        router.push({ name: 'Dashboard' })
+      }
+>>>>>>> 9ecc88f25d5122f3153b38880279e64e52f0aeac
     }
   }
 

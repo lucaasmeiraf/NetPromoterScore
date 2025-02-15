@@ -35,9 +35,13 @@ const props = defineProps({
 const router = useRouter()
 
 const lastResponse = computed(() => {
-  return props.survey.lastResponse
-    ? props.survey.lastResponse.toLocaleDateString('pt-BR')
-    : 'N/A'
+  if(props.survey.lastResponse){
+    const date = new Date(props.survey.lastResponse)
+    if(!isNaN(date.getTime())){
+      return date.toLocaleDateString('pt-BR')
+    }
+  }
+  return 'N/A'
 })
 
 const npsClass = computed(() => {
@@ -47,7 +51,7 @@ const npsClass = computed(() => {
 })
 
 const navigateToDashboard = () => {
-  router.push({ name: 'Dashboard da Pesquisa', params: { surveyId: props.survey.id } })
+  router.push({ name: 'SurveyDashboard', params: { surveyId: props.survey.id } })
 }
 </script>
 
