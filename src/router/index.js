@@ -4,7 +4,7 @@ import DashboardLayout from '../layouts/DashboardLayout.vue'
 
 const routes = [
   {
-    path: '/',
+    path: '/login',
     name: 'login',
     component: LoginView
   },

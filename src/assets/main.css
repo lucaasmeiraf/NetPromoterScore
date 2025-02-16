@@ -18,6 +18,17 @@ a,
   box-shadow: 0 2px 8px rgba(0,0,0,0.1) !important;
 }
 
+.chart-container {
+  overflow: hidden;
+  position: relative;
+  min-height: 300px;
+}
+
+canvas {
+  max-width: 100%;
+  height: auto!important;
+}
+
 .fade-enter-active,
 .fade-leave-active {
   transition: opacity 0.3s;

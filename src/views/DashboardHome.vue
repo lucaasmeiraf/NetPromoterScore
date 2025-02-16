@@ -1,67 +1,68 @@
 <template>
   <div class="dashboard-home" @mousemove="handleMouseMove">
-
-    <div v-if="loading" class="loading-overlay">
-      <div class="loader"></div>
-    </div>
-
-    <div v-if="error" class="error-message">
-      {{ error }}
-    </div>
-
-    <!-- Efeito de Partículas Interativas -->
-    <div class="particles">
-      <div
-        v-for="(particle, index) in particles"
-        :key="index"
-        class="particle"
-        :style="particle.style"
-      ></div>
-    </div>
-
-    <!-- Conteúdo Principal -->
-    <div class="main-content">
-      <!-- Header com Efeito de Vidro -->
-      <div class="glass-header">
-        <h1>Bem-vindo ao <span class="gradient-text">Medware Analytics</span></h1>
-        <p>Seu hub central de inteligência de pesquisas</p>
+    <div class="dashboard-container">
+      <div v-if="loading" class="loading-overlay">
+        <div class="loader"></div>
       </div>
 
-      <div class="metric-grid">
+      <div v-if="error" class="error-message">
+        {{ error }}
+      </div>
+
+      <!-- Efeito de Partículas Interativas -->
+      <div class="particles">
         <div
-          v-for="(metric, index) in metrics"
+          v-for="(particle, index) in particles"
           :key="index"
-          class="metric-card"
-          :class="{ 'active': activeIndex === index }"
-          :style="{
-            transform: `translate(
-              ${metric.offset.x}px,
-              ${metric.offset.y}px
-            )`
-          }"
-          @mouseenter="setActiveIndex(index)"
-          @mouseleave="setActiveIndex(-1)"
-          ref="metricElements"
-        >
-          <div class="metric-icon">{{ metric.icon }}</div>
-          <div class="metric-value">
-            {{ metric.currentValue }}
-            <span v-if="metric.suffix">{{ metric.suffix }}</span>
-          </div>
-          <div class="metric-label">{{ metric.label }}</div>
-          <div class="metric-trend" :class="trendClass(metric)">
-            {{ trendArrow(metric) }}
+          class="particle"
+          :style="particle.style"
+        ></div>
+      </div>
+
+      <!-- Conteúdo Principal -->
+      <div class="main-content">
+        <!-- Header com Efeito de Vidro -->
+        <div class="glass-header">
+          <h1>Bem-vindo ao <span class="gradient-text">Medware Analytics</span></h1>
+          <p>Seu hub central de inteligência de pesquisas</p>
+        </div>
+
+        <div class="metric-grid">
+          <div
+            v-for="(metric, index) in metrics"
+            :key="index"
+            class="metric-card"
+            :class="{ 'active': activeIndex === index }"
+            :style="{
+              transform: `translate(
+                ${metric.offset.x}px,
+                ${metric.offset.y}px
+              )`
+            }"
+            @mouseenter="setActiveIndex(index)"
+            @mouseleave="setActiveIndex(-1)"
+            ref="metricElements"
+          >
+            <div class="metric-icon">{{ metric.icon }}</div>
+            <div class="metric-value">
+              {{ metric.currentValue }}
+              <span v-if="metric.suffix">{{ metric.suffix }}</span>
+            </div>
+            <div class="metric-label">{{ metric.label }}</div>
+            <div class="metric-trend" :class="trendClass(metric)">
+              {{ trendArrow(metric) }}
+            </div>
           </div>
         </div>
+
+        <!-- <div class="history-chart">
+          <LineChart
+            :labels="chartLabels"
+            :datasets="chartData"
+          />
+        </div> -->
+
       </div>
-
-      <!-- <div class="history-chart">
-        <LineChart
-          :labels="chartLabels"
-          :datasets="chartData"
-        />
-      </div> -->
-
     </div>
   </div>
 </template>
@@ -255,6 +256,18 @@ const setActiveIndex = (index) => {
   background: linear-gradient(45deg, #f8fafc, #e2e8f0);
   overflow: hidden;
   position: relative;
+}
+
+.dashboard-container {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 2rem;
+}
+
+@media (max-width: 768px) {
+  .dashboard-container {
+    padding: 1rem;
+  }
 }
 
 .particles {

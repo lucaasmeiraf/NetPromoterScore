@@ -1,50 +1,152 @@
-<!-- src/components/charts/NpsDistributionChart.vue -->
 <template>
-  <BaseChart
-    title="Dashboard"
-    type="donut"
-    :series="series"
-    :options="chartOptions"
-  />
+  <div class="chart-container">
+    <canvas ref="chartCanvas"></canvas>
+  </div>
 </template>
 
 <script setup>
-import { ref, onMounted } from 'vue'
+import { ref, onMounted, onBeforeUnmount, watch } from 'vue'
+import { Chart, registerables } from 'chart.js'
 import axios from 'axios'
-import BaseChart from './BaseChart.vue'
+
+Chart.register(...registerables)
 
 const props = defineProps({
-  surveyId: {
-    type: String,
-    required: true
-  }
+  surveyId: String,
+  startDate: String,
+  endDate: String,
+  userId: String
 })
 
-const series = ref([0, 0, 0]) // [detratores, neutros, promotores]
+const chartCanvas = ref(null)
+let chartInstance = null
 
-const chartOptions = ref({
-  labels: ['Detratores (0-6)', 'Neutros (7-8)', 'Promotores (9-10)'],
-  colors: ['#ef4444', '#f59e0b', '#10b981'],
-  legend: {
-    position: 'bottom'
+const getNpsDistribution = async () => {
+  try {
+    let url = `http://localhost:5012/responses?surveyId=${props.surveyId}`
+
+    if(props.startDate) url += `&respondedAt_gte=${props.startDate}`
+    if(props.endDate) url += `&respondedAt_lte=${props.endDate}`
+    if(props.userId) url += `&userId=${props.userId}`
+
+    const { data } = await axios.get(url)
+    // Filtra apenas respostas do tipo range
+    const scores = data.flatMap(response =>
+      response.questions
+        .map((question, index) => ({
+          type: question.type,
+          value: response.answers[index]
+        }))
+        .filter(q => q.type === 'range')
+        .map(q => parseInt(q.value))
+    ).filter(score => !isNaN(score))
+
+    // Agrupa por pontuação
+    const distribution = Array(11).fill(0)
+    scores.forEach(score => {
+      if (score >= 0 && score <= 10) {
+        distribution[score]++
+      }
+    })
+
+    return distribution
+  } catch (error) {
+    console.error('Erro ao carregar dados:', error)
+    return Array(11).fill(0)
+  }
+}
+
+watch(() => [props.startDate, props.endDate, props.userId], async () => {
+  const distribution = await getNpsDistribution()
+  if(chartInstance) {
+    chartInstance.data.datasets[0].data = distribution
+    chartInstance.update()
   }
 })
 
 onMounted(async () => {
-  try {
-    const { data } = await axios.get(`http://localhost:5012/responses?surveyId=${props.surveyId}`)
+  const distribution = await getNpsDistribution()
 
-    const distribution = data.reduce((acc, response) => {
-      const score = response.answers.find(a => a.type === 'nps')?.value
-      if (score <= 6) acc[0]++
-      else if (score <= 8) acc[1]++
-      else acc[2]++
-      return acc
-    }, [0, 0, 0])
+  if (chartCanvas.value) {
+    const ctx = chartCanvas.value.getContext('2d')
 
-    series.value = distribution
-  } catch (error) {
-    console.error('Erro ao carregar dados NPS:', error)
+    chartInstance = new Chart(ctx, {
+      type: 'bar',
+      data: {
+        labels: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
+        datasets: [{
+          label: 'Distribuição NPS',
+          data: distribution,
+          backgroundColor: Array.from({length: 11}, (_, i) => {
+            if(i >= 9) return '#10b981'    // Verde para promotores
+            if(i >= 7) return '#eab308'    // Amarelo para neutros
+            return '#ef4444'               // Vermelho para detratores
+          }),
+          borderColor: '#fff',
+          borderWidth: 1
+        }]
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: {
+          legend: {
+            display: false
+          },
+          tooltip: {
+            callbacks: {
+              label: (context) => {
+                const value = context.raw
+                return `${value} ${value === 1 ? 'resposta' : 'respostas'}`
+              }
+            }
+          }
+        },
+        scales: {
+          x: {
+            title: {
+              display: true,
+              text: 'Pontuação NPS',
+              color: '#64748b'
+            },
+            grid: {
+              display: false
+            }
+          },
+          y: {
+            title: {
+              display: true,
+              text: 'Número de Respostas',
+              color: '#64748b'
+            },
+            grid: {
+              color: 'rgba(241, 245, 249, 0.5)'
+            },
+            beginAtZero: true
+          }
+        }
+      }
+    })
+  }
+})
+
+onBeforeUnmount(() => {
+  if (chartInstance) {
+    chartInstance.destroy()
   }
 })
 </script>
+
+<style scoped>
+.chart-container {
+  background: white;
+  padding: 1.5rem;
+  border-radius: 12px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+}
+
+canvas {
+  width: 100% !important;
+  height: 400px !important;
+}
+</style>
