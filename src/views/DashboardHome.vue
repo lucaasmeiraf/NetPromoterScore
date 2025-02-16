@@ -252,7 +252,8 @@ const setActiveIndex = (index) => {
 
 <style scoped>
 .dashboard-home {
-  height: 100vh;
+  flex: 1;
+  height: 92vh;
   background: linear-gradient(45deg, #f8fafc, #e2e8f0);
   overflow: hidden;
   position: relative;

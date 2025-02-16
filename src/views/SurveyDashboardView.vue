@@ -6,22 +6,40 @@
             <div class="title-wrapper">
               <h1>{{ survey.title }}</h1>
                   <!-- Filtros -->
-              <div class="filters">
-                <div class="filter-group">
-                  <label>Período:</label>
-                  <input type="date" v-model="startDate" />
-                  <input type="date" v-model="endDate" />
-                </div>
-                <div class="filter-group">
-                  <label>Usuário:</label>
-                  <select v-model="selectedUser">
-                    <option value="">Todos</option>
-                    <option v-for="user in users" :key="user.id" :value="user.id">
-                      {{ user.name }}
-                    </option>
-                  </select>
-                </div>
-              </div>
+                  <div class="filters">
+                    <div class="filter-group">
+                      <label>Data inicial:</label>
+                      <input
+                        type="date"
+                        v-model="startDate"
+                        :max="endDate || ''"
+                      />
+                    </div>
+
+                    <div class="filter-group">
+                      <label>Data final:</label>
+                      <input
+                        type="date"
+                        v-model="endDate"
+                        :min="startDate || ''"
+                        @change="validateDates"
+                      />
+                    </div>
+
+                    <div class="filter-group">
+                      <label>Usuário:</label>
+                      <select v-model="selectedUser">
+                        <option value="">Todos</option>
+                        <option
+                          v-for="user in users"
+                          :key="user.id"
+                          :value="user.id"
+                        >
+                          {{ user.name }}
+                        </option>
+                      </select>
+                    </div>
+                  </div>
           </div>
             <div class="stats">
               <div class="stat-item">
@@ -63,7 +81,6 @@
   import axios from 'axios'
   import NpsDistributionChart from '@/components/charts/NpsDistributionChart.vue'
   import ResponseTrendChart from '@/components/charts/ResponseTrendChart.vue'
-  import { debounce } from 'lodash'
 
   const route = useRoute()
   const surveyId = route.params.surveyId
@@ -76,6 +93,62 @@
   const endDate = ref('')
   const selectedUser = ref('')
   const users = ref([])
+
+  const state = ref({
+    survey: {
+      title: '',
+      responses: []
+    },
+    filters: {
+      startDate: '',
+      endDate: '',
+      userId: ''
+    },
+    users: [],
+    loading: false
+  })
+
+  const fetchSurveyData = async () => {
+    try {
+      state.value.loading = true
+
+      const params = {
+        _embed: 'responses',
+        _expand: 'user'
+      }
+
+      if(state.value.filters.startDate) {
+        params.respondedAt_gte = `${state.value.filters.startDate}T00:00:00.000Z`
+      }
+
+      if(state.value.filters.endDate) {
+        params.respondedAt_lte = `${state.value.filters.endDate}T23:59:59.999Z`
+      }
+
+      const { data } = await axios.get(`http://localhost:5012/surveys/${surveyId}`, {
+        params
+      })
+
+      state.value.survey = data
+      state.value.loading = false
+
+    } catch (error) {
+      console.error('Erro ao carregar pesquisa:', error)
+      state.value.loading = false
+    }
+  }
+
+
+  const validateDates = () => {
+    if(startDate.value && endDate.value) {
+      const start = new Date(startDate.value)
+      const end = new Date(endDate.value)
+      if(start > end) {
+        alert('A data final deve ser posterior à data inicial')
+        endDate.value = ''
+      }
+    }
+  }
 
   // Calcular dados das respostas
   const responseData = computed(() => {
@@ -96,18 +169,25 @@
     return Math.round(((promoters - detractors) / total) * 100)
   })
 
-  const applyFilters = debounce(() => {
-  // Forçar atualização dos componentes
-  }, 500)
+  watch(() => state.value.filters, (newFilters) => {
+  if(newFilters.startDate && newFilters.endDate) {
+    const start = new Date(newFilters.startDate)
+    const end = new Date(newFilters.endDate)
+    if(start > end) return
+  }
+  fetchSurveyData()
+}, { deep: true })
 
-  onMounted(async () => {
-    try {
-      const { data } = await axios.get('http://localhost:5012/users')
-      users.value = data
-    } catch (error) {
-      console.error('Erro ao carregar usuários:', error)
-    }
-  })
+onMounted(async () => {
+  await fetchSurveyData()
+  // Busca usuários
+  try {
+    const { data } = await axios.get('http://localhost:5012/users')
+    state.value.users = data
+  } catch (error) {
+    console.error('Erro ao carregar usuários:', error)
+  }
+})
 
   onMounted(async () => {
     try {
@@ -117,8 +197,6 @@
       console.error('Erro ao carregar pesquisa:', error)
     }
   })
-
-  watch([startDate, endDate, selectedUser], applyFilters)
 
   </script>
 
@@ -248,6 +326,21 @@
       flex-direction: column;
       align-items: flex-start;
       width: 100%;
+    }
+
+    .error-message {
+      color: #ef4444;
+      font-size: 0.9rem;
+      margin-top: 0.5rem;
+      display: none; /* Será mostrado via JavaScript se necessário */
+    }
+
+    input:invalid {
+      border-color: #ef4444;
+    }
+
+    input:invalid + .error-message {
+      display: block;
     }
 
     input[type="date"],

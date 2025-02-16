@@ -18,6 +18,12 @@ const props = defineProps({
   userId: String
 })
 
+const formatDate = (dateString) => {
+  if (!dateString) return ''
+  const date = new Date(dateString)
+  return date.toISOString().split('T')[0]
+}
+
 const chartCanvas = ref(null)
 let chartInstance = null
 
@@ -25,31 +31,39 @@ const getNpsDistribution = async () => {
   try {
     let url = `http://localhost:5012/responses?surveyId=${props.surveyId}`
 
-    if(props.startDate) url += `&respondedAt_gte=${props.startDate}`
-    if(props.endDate) url += `&respondedAt_lte=${props.endDate}`
-    if(props.userId) url += `&userId=${props.userId}`
+    // Adiciona filtros formatados corretamente
+    if(props.startDate) {
+      url += `&respondedAt_gte=${formatDate(props.startDate)}T00:00:00.000Z`
+    }
+    if(props.endDate) {
+      url += `&respondedAt_lte=${formatDate(props.endDate)}T23:59:59.999Z`
+    }
+    if(props.userId) {
+      url += `&userId=${props.userId}`
+    }
+
+    //console.log('API URL:', url) // Para debug
 
     const { data } = await axios.get(url)
-    // Filtra apenas respostas do tipo range
+
     const scores = data.flatMap(response =>
       response.questions
         .map((question, index) => ({
           type: question.type,
-          value: response.answers[index]
+          value: response.answers[index],
+          respondedAt: response.respondedAt
         }))
         .filter(q => q.type === 'range')
         .map(q => parseInt(q.value))
-    ).filter(score => !isNaN(score))
+        .filter(score => !isNaN(score) && score >= 0 && score <= 10))
 
     // Agrupa por pontuação
     const distribution = Array(11).fill(0)
-    scores.forEach(score => {
-      if (score >= 0 && score <= 10) {
-        distribution[score]++
-      }
-    })
+    scores.forEach(score => distribution[score]++)
 
+    //console.log('Distribution data:', distribution) // Para debug
     return distribution
+
   } catch (error) {
     console.error('Erro ao carregar dados:', error)
     return Array(11).fill(0)
@@ -57,12 +71,17 @@ const getNpsDistribution = async () => {
 }
 
 watch(() => [props.startDate, props.endDate, props.userId], async () => {
-  const distribution = await getNpsDistribution()
-  if(chartInstance) {
-    chartInstance.data.datasets[0].data = distribution
-    chartInstance.update()
+  try {
+    const distribution = await getNpsDistribution()
+    if(chartInstance) {
+      chartInstance.data.datasets[0].data = distribution
+      chartInstance.update()
+      //console.log('Chart updated with new data') // Para debug
+    }
+  } catch (error) {
+    console.error('Erro ao atualizar gráfico:', error)
   }
-})
+}, { deep: true })
 
 onMounted(async () => {
   const distribution = await getNpsDistribution()
