@@ -18,7 +18,7 @@ const routes = [
   {
     path: '/survey/already-submitted',
     name: 'SurveyAlreadySubmitted',
-    component: () => import('../views/SurveyAlreadySubmitted.vue') 
+    component: () => import('../views/SurveyAlreadySubmitted.vue')
   },
   // Rotas do dashboard
   {
@@ -27,6 +27,11 @@ const routes = [
     component: DashboardLayout,
     meta: { requiresAuth: true },
     children: [
+      {
+        path: '',
+        name: 'DashboardHome',
+        component: () => import('../views/DashboardHome.vue')
+      },
       {
         path: 'create-survey',
         name: 'Criar Pesquisa',

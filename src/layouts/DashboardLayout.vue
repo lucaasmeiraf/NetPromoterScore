@@ -1,68 +1,57 @@
 <template>
   <div class="dashboard-layout">
-    <aside v-if="!$route.meta.publicPage" class="sidebar">
+    <aside class="sidebar">
       <nav>
-        <!-- Adicione este novo link -->
-        <router-link to="/dashboard/create-survey">Criar Nova Pesquisa</router-link>
-        <router-link to="/dashboard/surveys">Pesquisas</router-link>
-        <router-link to="/dashboard/responses">Respostas</router-link>
+        <router-link to="/dashboard">🏠 Início</router-link>
+        <router-link to="/dashboard/create-survey">📝 Criar Pesquisa</router-link>
+        <router-link to="/dashboard/surveys">📊 Pesquisas</router-link>
+        <router-link to="/dashboard/responses">📨 Respostas</router-link>
       </nav>
     </aside>
 
     <main class="content">
-      <header v-if="!$route.meta.publicPage" class="header">
+      <header class="header">
         <div class="header-left">
-          <button @click="goBack" class="back-button" v-if="showBackButton">Voltar</button>
+          <button @click="goBack" class="back-button" v-if="showBackButton">← Voltar</button>
           <h1>{{ currentRouteName }}</h1>
         </div>
-        <button @click="handleLogout">Sair</button>
+        <button @click="handleLogout" class="logout-button">Sair</button>
       </header>
-      
-      <router-view></router-view>
+
+      <router-view v-slot="{ Component }">
+        <transition name="fade" mode="out-in">
+          <component :is="Component" />
+        </transition>
+      </router-view>
     </main>
   </div>
 </template>
 
 <script setup>
-  import { computed } from 'vue'
-  import { useRouter, useRoute  } from 'vue-router'
+import { computed } from 'vue'
+import { useRouter, useRoute } from 'vue-router'
 
+const router = useRouter()
+const route = useRoute()
 
-  const router = useRouter()
-  const route = useRoute()
+const currentRouteName = computed(() => route.name)
 
-  const currentRouteName = computed(() => {
-    return router.currentRoute.value.name
-  })
+const showBackButton = computed(() => {
+  return !['Dashboard', 'Respostas', 'Pesquisas', 'Criar Pesquisa'].includes(route.name)
+})
 
-  const showBackButton = computed(() => {
-  // Mostrar apenas quando não estiver na página principal
-    return ![
-      'Dashboard',
-      'Respostas',
-      'Pesquisas',
-      'Criar Pesquisa'
-    ].includes(route.name)
-  })
-
-  const goBack = () => {
-    // Substitua por navegação explícita
-    if (route.name === 'SurveyDashboard') {
-      router.push({ name: 'Respostas' })
-    } else {
-      // Verifica se há histórico válido
-      if (window.history.state?.back) {
-        router.go(-1)
-      } else {
-        router.push({ name: 'Dashboard' })
-      }
-    }
+const goBack = () => {
+  if (route.name === 'SurveyDashboard') {
+    router.push({ name: 'Respostas' })
+  } else {
+    router.go(-1)
   }
+}
 
-  const handleLogout = () => {
-    localStorage.removeItem('isAuthenticated')
-    router.push('/')
-  }
+const handleLogout = () => {
+  localStorage.removeItem('isAuthenticated')
+  router.push('/')
+}
 </script>
 
 <style scoped lang="scss">
