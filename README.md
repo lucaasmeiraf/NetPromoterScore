@@ -1,35 +1,40 @@
-# nps-app
+# MedWare Analytics - Plataforma de Análise NPS
 
-This template should help get you started developing with Vue 3 in Vite.
+![Dashboard Preview](https://via.placeholder.com/800x400.png?text=Dashboard+Preview) <!-- Adicione screenshot real -->
 
-## Recommended IDE Setup
+Plataforma completa para coleta e análise de dados NPS (Net Promoter Score) com dashboard interativo e relatórios detalhados.
 
-[VSCode](https://code.visualstudio.com/) + [Volar](https://marketplace.visualstudio.com/items?itemName=Vue.volar) (and disable Vetur).
+## ✨ Funcionalidades Principais
 
-## Customize configuration
+- **Dashboard Interativo**
+  - Visualização em tempo real do NPS
+  - Gráficos de distribuição de scores
+  - Tendência temporal de respostas
+  - Métricas-chave de desempenho
 
-See [Vite Configuration Reference](https://vite.dev/config/).
+- **Gestão de Pesquisas**
+  - Criação/edição de questionários
+  - Tipos de perguntas variados (NPS, múltipla escolha, texto)
+  - Controle de status (ativa/inativa)
 
-## Project Setup
+- **Autenticação Segura**
+  - Login com JWT Token
+  - Controle de permissões
+  - Hash de senhas com bcrypt
 
-```sh
-npm install
-```
+- **API Poderosa**
+  - Endpoints RESTful documentados
+  - Integração com PostgreSQL
+  - CRUD completo de usuários e pesquisas
 
-### Compile and Hot-Reload for Development
+## 🛠 Tecnologias Utilizadas
 
-```sh
-npm run dev
-```
+![Vue.js](https://img.shields.io/badge/Vue.js-35495E?style=for-the-badge&logo=vuedotjs&logoColor=4FC08D)
+![Node.js](https://img.shields.io/badge/Node.js-43853D?style=for-the-badge&logo=node.js&logoColor=white)
+![Chart.js](https://img.shields.io/badge/Chart.js-FF6384?style=for-the-badge&logo=chartdotjs&logoColor=white)
 
-### Compile and Minify for Production
+## 🚀 Instalação
 
-```sh
-npm run build
-```
-
-### Lint with [ESLint](https://eslint.org/)
-
-```sh
-npm run lint
-```
+### Pré-requisitos
+- Node.js 16+
+- NPM/Yarn
