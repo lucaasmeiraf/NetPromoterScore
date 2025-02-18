@@ -1,6 +1,7 @@
 # MedWare Analytics - Plataforma de Análise NPS
 
-![Dashboard Preview](https://via.placeholder.com/800x400.png?text=Dashboard+Preview) <!-- Adicione screenshot real -->
+![Dashboard Preview](https://github.com/user-attachments/assets/8bfe135d-dcd4-40d8-9745-35704f931f31)
+
 
 Plataforma completa para coleta e análise de dados NPS (Net Promoter Score) com dashboard interativo e relatórios detalhados.
 
